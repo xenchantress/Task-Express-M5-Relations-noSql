@@ -1,8 +1,8 @@
 const express = require("express");
-const getTagsWithPost  = require("./tags.controllers");
-const tagRouter = express.Router;
+const tagRouter = express.Router();
+const {getAllTags} = require("./tags.controllers")
 
-tagRouter.get("/", getTagsWithPost);
+tagRouter.get("/", getAllTags);
 //tagRouter.post('/', )
 
 module.exports = tagRouter;
