@@ -9,15 +9,15 @@ const {
   postsCreate,
 } = require("./posts.controllers");
 
-router.param("postId", async (req, res, next, postId) => {
-  const post = await fetchPost(postId, next);
+router.param("postId", async (req, res, postId) => {
+  const post = await fetchPost(postId);
   if (post) {
     req.post = post;
-    next();
+  
   } else {
     const err = new Error("Post Not Found");
     err.status = 404;
-    next(err);
+    
   }
 });
 
