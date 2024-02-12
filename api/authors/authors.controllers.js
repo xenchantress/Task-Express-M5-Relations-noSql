@@ -1,27 +1,24 @@
 //const Author = require('./author.model');
-const Author = require("../models/author");
+const Author = require("../../models/Author");
 
-const createPost = async (req, res) => {
+const getAllAuthors = async (req, res) => {
   try {
-    const { authorId, title, content } = req.body;
-
-    const post = await Post.create({ title, content });
-
-    const author = await Author.findByIdAndUpdate(
-      authorId,
-      {
-        $push: {
-          posts: post.id,
-        },
-      },
-      { new: true }
-    );
-    res.status(201).json({ message: "Post created successfully", post });
+    const authors = await Author.find();
+    return res.status(200).json(authors);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.log("Error in getting all authors");
   }
 };
 
+const createAuthor = async (req, res) => {
+  try {
+    const author = await Author.create(req.body);
+    return res.status(201).json(author);
+  } catch (error) {
+    console.log("Error in creating an author");
+  }
+};
 module.exports = {
-  createPost,
+  getAllAuthors,
+  createAuthor,
 };

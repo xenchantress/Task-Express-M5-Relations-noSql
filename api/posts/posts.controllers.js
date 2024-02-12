@@ -1,29 +1,25 @@
-const Post = require('../../models/Post');
+const Post = require("../../models/Post");
+const Author = require("../../models/Author");
 
-exports.fetchPost = async (postId, next) => {
+exports.getAllPosts = async (req, res) => {
   try {
-    const post = await Post.findById(postId);
-    return post;
+    const posts = await Post.find();
+    return res.status(200).json(posts);
   } catch (error) {
-    next(error);
+    return res.status(500).json({ error: "Error getting posts" });
   }
 };
 
-exports.postsCreate = async (req, res) => {
+exports.createPost = async (req, res) => {
   try {
-    const newPost = await Post.create(req.body);
-    res.status(201).json(newPost);
-  } catch (error) {
-    next(error);
-  }
-};
+    req.body.authorId = req.user._id;
+    const post = await Post.create(req.body);
+    const author = await Author.findById(req.user._id);
 
-exports.postsDelete = async (req, res) => {
-  try {
-    await Post.findByIdAndRemove({ _id: req.post.id });
-    res.status(204).end();
+    return res.status(201).json(post);
   } catch (error) {
-    next(error);
+    console.log("Error in creating a post", error);
+    res.status(500).json({ error: "Error creating a post" });
   }
 };
 
@@ -32,7 +28,8 @@ exports.postsUpdate = async (req, res) => {
     await Post.findByIdAndUpdate(req.post.id, req.body);
     res.status(204).end();
   } catch (error) {
-    next(error);
+    console.error("Error updating post", error);
+    res.status(500).json({ error: "Error updating post" });
   }
 };
 
@@ -41,6 +38,7 @@ exports.postsGet = async (req, res) => {
     const posts = await Post.find();
     res.json(posts);
   } catch (error) {
-    next(error);
+    console.error("Error getting posts", error);
+    res.status(500).json({ error: "Error getting posts" });
   }
 };

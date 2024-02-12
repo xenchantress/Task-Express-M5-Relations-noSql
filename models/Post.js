@@ -1,14 +1,15 @@
-const mongoose = require('mongoose');
-//const router = express.Router();
-// const Post = require('./models/post');
-// const Tag = require('/:postId/tag');
-
+const mongoose = require("mongoose");
 
 const PostSchema = new mongoose.Schema({
   title: String,
   body: String,
-  author: { type: mongoose.Schema.Types.ObjectId, ref: 'Tag'}
+  author: { type: mongoose.Schema.Types.ObjectId, ref: "Author" },
+  tag: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tag",
+    },
+  ],
 });
 
-module.exports = mongoose.model('Post', PostSchema);
-//Should PostSchema be camelCase?
+module.exports = mongoose.model("Post", PostSchema);
