@@ -1,5 +1,7 @@
 const Post = require("../../models/Post");
 const Author = require("../../models/Author");
+const Tag = require('../../models/Tag');
+
 
 exports.getAllPosts = async (req, res) => {
   try {
@@ -40,5 +42,17 @@ exports.postsGet = async (req, res) => {
   } catch (error) {
     console.error("Error getting posts", error);
     res.status(500).json({ error: "Error getting posts" });
+  }
+};
+
+exports.addTag = async (req, res) =>{
+  try {
+    const postId = req.params.postId;
+    const tagId = req.params.tagId;
+    const post = await Post.findByIdAndUpdate(postId, { $push: { tags: tagId }});
+    const tag = await Tag.findByIdAndUpdate(tagId, { $push: { posts: postId }});
+    return res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

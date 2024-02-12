@@ -1,10 +1,9 @@
 const express = require("express");
-
 const postRouter = express.Router();
-const { getAllPosts, createPost } = require("./posts.controllers");
+const { getAllPosts, createPost, addTag } = require("./posts.controllers");
 
 postRouter.get("/", getAllPosts);
-postRouter.post("/", createPost);
+postRouter.post("/", addTag);
 
 
 module.exports = postRouter;
